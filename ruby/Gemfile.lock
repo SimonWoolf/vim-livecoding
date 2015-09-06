@@ -1,10 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    diffy (3.0.7)
     eventmachine (1.0.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  diffy
   eventmachine
