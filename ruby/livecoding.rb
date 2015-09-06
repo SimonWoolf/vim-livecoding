@@ -1,5 +1,8 @@
-require 'eventmachine'
-require 'diffy'
+# Vim plugin can't assume that people have bundler, or even a system ruby.
+# Vendorise gems and do paths manually
+script_dir = File.expand_path(File.dirname(__FILE__))
+require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
+require File.join(script_dir, '/vendor/diffy/lib/diffy')
 
 @child_socket, @parent_socket = Socket.pair(:UNIX, :DGRAM, 0)
 

@@ -1,0 +1,17 @@
+/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/bin/ruby -r ./siteconf20150906-14581-1majio9.rb extconf.rb 
+creating Makefile
+
+make  clean
+
+make
+compiling rubymain.cpp
+cc1plus: warning: command line option ‘-Wdeclaration-after-statement’ is valid for C/ObjC but not for C++ [enabled by default]
+cc1plus: warning: command line option ‘-Wimplicit-function-declaration’ is valid for C/ObjC but not for C++ [enabled by default]
+compiling mapper.cpp
+cc1plus: warning: command line option ‘-Wdeclaration-after-statement’ is valid for C/ObjC but not for C++ [enabled by default]
+cc1plus: warning: command line option ‘-Wimplicit-function-declaration’ is valid for C/ObjC but not for C++ [enabled by default]
+linking shared-object fastfilereaderext.so
+
+make  install
+/usr/bin/install -m 0755 fastfilereaderext.so .gem.20150906-14581-zpoe5b
+installing default fastfilereaderext libraries

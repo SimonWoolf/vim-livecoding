@@ -1,0 +1,564 @@
+package configuration for openssl
+cflags:  
+ldflags: 
+libs: -lssl -lcrypto  
+
+have_var: checking for rb_trap_immediate in ruby.h,rubysig.h... -------------------- no
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"gcc -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC     -c conftest.c"
+In file included from conftest.c:4:0:
+/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward/rubysig.h:14:2: warning: #warning rubysig.h is obsolete [-Wcpp]
+ #warning rubysig.h is obsolete
+  ^
+conftest.c: In function ‘t’:
+conftest.c:7:51: error: ‘rb_trap_immediate’ undeclared (first use in this function)
+ int t() { const volatile void *volatile p; p = &(&rb_trap_immediate)[0]; return 0; }
+                                                   ^
+conftest.c:7:51: note: each undeclared identifier is reported only once for each function it appears in
+conftest.c:7:41: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { const volatile void *volatile p; p = &(&rb_trap_immediate)[0]; return 0; }
+                                         ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <ruby.h>
+ 4: #include <rubysig.h>
+ 5: 
+ 6: /*top*/
+ 7: int t() { const volatile void *volatile p; p = &(&rb_trap_immediate)[0]; return 0; }
+ 8: int main(int argc, char **argv)
+ 9: {
+10:   if (argc > 1000000) {
+11:     printf("%p", &t);
+12:   }
+13: 
+14:   return 0;
+15: }
+/* end */
+
+--------------------
+
+have_func: checking for rb_thread_blocking_region()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_thread_blocking_region; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))rb_thread_blocking_region; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_header: checking for ruby/thread.h... -------------------- no
+
+"gcc -E -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC    conftest.c -o conftest.i"
+conftest.c:3:25: fatal error: ruby/thread.h: No such file or directory
+ #include <ruby/thread.h>
+                         ^
+compilation terminated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby/thread.h>
+/* end */
+
+--------------------
+
+have_func: checking for inotify_init() in sys/inotify.h... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:6:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))inotify_init; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <sys/inotify.h>
+ 4: 
+ 5: /*top*/
+ 6: int t() { void ((*volatile p)()); p = (void ((*)()))inotify_init; return 0; }
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+/* end */
+
+--------------------
+
+have_func: checking for writev() in sys/uio.h... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:6:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))writev; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <sys/uio.h>
+ 4: 
+ 5: /*top*/
+ 6: int t() { void ((*volatile p)()); p = (void ((*)()))writev; return 0; }
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+/* end */
+
+--------------------
+
+have_func: checking for rb_thread_fd_select()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_thread_fd_select; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))rb_thread_fd_select; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_type: checking for rb_fdset_t in ruby/intern.h... -------------------- yes
+
+"gcc -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC     -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <ruby/intern.h>
+4: 
+5: /*top*/
+6: typedef rb_fdset_t conftest_type;
+7: int conftestval[sizeof(conftest_type)?1:-1];
+/* end */
+
+--------------------
+
+have_func: checking for pipe2() in unistd.h... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:6:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))pipe2; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <unistd.h>
+ 4: 
+ 5: /*top*/
+ 6: int t() { void ((*volatile p)()); p = (void ((*)()))pipe2; return 0; }
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+/* end */
+
+--------------------
+
+have_func: checking for accept4() in sys/socket.h... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:6:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))accept4; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <sys/socket.h>
+ 4: 
+ 5: /*top*/
+ 6: int t() { void ((*volatile p)()); p = (void ((*)()))accept4; return 0; }
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+/* end */
+
+--------------------
+
+have_const: checking for SOCK_CLOEXEC in sys/socket.h... -------------------- yes
+
+"gcc -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC     -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/socket.h>
+4: 
+5: /*top*/
+6: typedef int conftest_type;
+7: conftest_type conftestval = (int)SOCK_CLOEXEC;
+/* end */
+
+--------------------
+
+have_func: checking for rb_wait_for_single_fd()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:53: error: ‘rb_wait_for_single_fd’ undeclared (first use in this function)
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_wait_for_single_fd; return 0; }
+                                                     ^
+conftest.c:4:53: note: each undeclared identifier is reported only once for each function it appears in
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_wait_for_single_fd; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))rb_wait_for_single_fd; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:1: warning: implicit declaration of function ‘rb_wait_for_single_fd’ [-Wimplicit-function-declaration]
+ int t() { rb_wait_for_single_fd(); return 0; }
+ ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { rb_wait_for_single_fd(); return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_func: checking for rb_enable_interrupt()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:53: error: ‘rb_enable_interrupt’ undeclared (first use in this function)
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_enable_interrupt; return 0; }
+                                                     ^
+conftest.c:4:53: note: each undeclared identifier is reported only once for each function it appears in
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_enable_interrupt; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))rb_enable_interrupt; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:1: warning: implicit declaration of function ‘rb_enable_interrupt’ [-Wimplicit-function-declaration]
+ int t() { rb_enable_interrupt(); return 0; }
+ ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { rb_enable_interrupt(); return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_func: checking for rb_time_new()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))rb_time_new; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))rb_time_new; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_header: checking for sys/event.h... -------------------- no
+
+"gcc -E -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC    conftest.c -o conftest.i"
+conftest.c:3:23: fatal error: sys/event.h: No such file or directory
+ #include <sys/event.h>
+                       ^
+compilation terminated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sys/event.h>
+/* end */
+
+--------------------
+
+have_func: checking for epoll_create() in sys/epoll.h... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:6:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))epoll_create; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: #include <sys/epoll.h>
+ 4: 
+ 5: /*top*/
+ 6: int t() { void ((*volatile p)()); p = (void ((*)()))epoll_create; return 0; }
+ 7: int main(int argc, char **argv)
+ 8: {
+ 9:   if (argc > 1000000) {
+10:     printf("%p", &t);
+11:   }
+12: 
+13:   return 0;
+14: }
+/* end */
+
+--------------------
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -Wall -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -Wextra -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -Wno-deprecated-declarations -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -Wno-ignored-qualifiers -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.     -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -Wno-unused-result -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+have_func: checking for clock_gettime()... -------------------- yes
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.    -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result  -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:53: error: ‘clock_gettime’ undeclared (first use in this function)
+ int t() { void ((*volatile p)()); p = (void ((*)()))clock_gettime; return 0; }
+                                                     ^
+conftest.c:4:53: note: each undeclared identifier is reported only once for each function it appears in
+conftest.c:4:28: warning: variable ‘p’ set but not used [-Wunused-but-set-variable]
+ int t() { void ((*volatile p)()); p = (void ((*)()))clock_gettime; return 0; }
+                            ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))clock_gettime; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+"gcc -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.    -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result  -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby  -lssl -lcrypto   -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4:1: warning: implicit declaration of function ‘clock_gettime’ [-Wimplicit-function-declaration]
+ int t() { clock_gettime(); return 0; }
+ ^
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { clock_gettime(); return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+
+have_const: checking for CLOCK_MONOTONIC_RAW in time.h... -------------------- yes
+
+"gcc -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.    -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result  -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result   -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <time.h>
+4: 
+5: /*top*/
+6: typedef int conftest_type;
+7: conftest_type conftestval = (int)CLOCK_MONOTONIC_RAW;
+/* end */
+
+--------------------
+
+have_const: checking for CLOCK_MONOTONIC in time.h... -------------------- yes
+
+"gcc -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.    -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result  -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result   -c conftest.c"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <time.h>
+4: 
+5: /*top*/
+6: typedef int conftest_type;
+7: conftest_type conftestval = (int)CLOCK_MONOTONIC;
+/* end */
+
+--------------------
+
+"g++ -o conftest -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/x86_64-linux -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1/ruby/backward -I/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/include/ruby-1.9.1 -I.    -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result  -O3 -ggdb -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC   -Wall -Wextra -Wno-deprecated-declarations -Wno-ignored-qualifiers -Wno-unused-result conftest.c  -L. -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -Wl,-R/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L.  -rdynamic -Wl,-export-dynamic      -lssl -lcrypto   '-Wl,-rpath,/../lib' -Wl,-R -Wl,/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -L/mnt/terra/home/simon/.rvm/rubies/ruby-1.9.3-p551/lib -lruby -lstdc++ -lpthread -lrt -ldl -lcrypt -lm   -lc"
+cc1plus: warning: command line option ‘-Wdeclaration-after-statement’ is valid for C/ObjC but not for C++ [enabled by default]
+cc1plus: warning: command line option ‘-Wimplicit-function-declaration’ is valid for C/ObjC but not for C++ [enabled by default]
+conftest.c: In function ‘int main()’:
+conftest.c:5:35: warning: variable ‘tuple’ set but not used [-Wunused-but-set-variable]
+   int main(){ pair<const int,int> tuple = make_pair(1,2); }
+                                   ^
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3:   #include <utility>
+4:   using namespace std;
+5:   int main(){ pair<const int,int> tuple = make_pair(1,2); }
+/* end */
+
