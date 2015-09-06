@@ -14,7 +14,7 @@ function PublishBuffer()
   command! -buffer StopPublishingThisBuffer call StopPublishingThisBuffer()
   command! -buffer StopAllPublishing call StopAllPublishing()
   autocmd BufUnload * call StopPublishingThisBuffer()
-  autocmd InsertLeave * call UpdateIfNeeded()
+  autocmd CursorMoved,CursorMovedI,InsertLeave * call UpdateIfNeeded()
   :ruby publish_buffer
 endfunction
 
@@ -33,4 +33,5 @@ endfunction
 command! PublishBuffer call PublishBuffer()
 
 " Not sure why rubyfile doesn't work when just given a relative paths
+" :p = absolute path, :h = remove last section from path
 execute "rubyfile " . expand("<sfile>:p:h:h") . "/ruby/livecoding.rb"
