@@ -1,1 +1,24 @@
 In early stages of experimental playing around. Not remotely usable yet.
+
+TODO:
+- use datagram socket rather than stream. figure out how to do that with
+  eventmachine, connect_unix_domain currently forces stream. want to keep
+  messages distinct. also UNIXServer ruby module forces stream atm. grr.
+  maybe simpler to keep as stream -- test if stream behaves messagelike if
+  there are newlines between messages. (but then how will it deal with newlines
+  in the message, eg in the diff?)
+- any advantage to switching to socket client on the main thread and server on em?
+- any way to use one half of a socket pair in eventmachine?
+
+links
+=====
+
+sockets in ruby:
+https://www.reddit.com/r/ruby/comments/f69nf/unix_socket_the_eventmachine_version/
+http://rubylearning.com/blog/2010/10/01/an-introduction-to-eventmachine-and-how-to-avoid-callback-spaghetti/
+
+vim plugin writing:
+http://stevelosh.com/blog/2011/09/writing-vim-plugins/
+http://www.linux-mag.com/id/1027/
+http://learnvimscriptthehardway.stevelosh.com/chapters/19.html
+https://robots.thoughtbot.com/write-a-vim-plugin-with-tdd
