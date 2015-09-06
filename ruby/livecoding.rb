@@ -4,17 +4,19 @@ script_dir = File.expand_path(File.dirname(__FILE__))
 require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
 require File.join(script_dir, '/vendor/diffy/lib/diffy')
 
-@child_socket, @parent_socket = Socket.pair(:UNIX, :DGRAM, 0)
+#@child_socket, @parent_socket = Socket.pair(:UNIX, :DGRAM, 0)
+@socket = UNIXServer.new("/tmp/vim-livecoding-#{rand(36**8).to_s(36)}")
 
 def publish_buffer
   VIM::message("Connected to vim-livecoding, publishing buffer...")
-  VIM::message("Buffer being published to URL")
   @last_buffer_contents = get_buffer_contents
   @last_compared = Time.now
   if !@ably_process
     puts "starting ably process"
     @ably_process = start_ably_process
   end
+  @socket = @socket.accept
+  VIM::message("Buffer being published to URL")
 end
 
 def update_if_needed()
@@ -33,12 +35,13 @@ def update_if_needed()
     VIM::message("update_if_needed called, but buffer unchanged (is: #{@last_buffer_contents})")
     return
   else
-    message = begin
-      @parent_socket.recv_nonblock(100)
+    @socket.send diff.to_s.split.first, 0
+    reply = begin
+      @socket.recv_nonblock(100)
     rescue Errno::EAGAIN, Errno::EWOULDBLOCK
       ""
     end
-    VIM::message("update_if_needed called, message is: #{message}, diff is: #{diff.to_s}")
+    VIM::message("update_if_needed called, reply is: #{reply}, diff is: #{diff.to_s}")
   end
 end
 
@@ -56,19 +59,24 @@ end
 
 def start_ably_process()
   fork do
-    # Inside this process @last_buffer_contents is the state of the buffer at the time the process was forked
+    # Inside this process @last_buffer_contents is the state of the buffer at the time the process was forked,
+    # @socket is the server end of the socket
     EventMachine.run do
-      EM.add_periodic_timer(1) do
-        #@count += 1
-        @child_socket.send "last buffer contents: " + @last_buffer_contents.inspect, 0
-      end
-
-      EM.add_timer(10) do
-        @child_socket.send "I waited 10 seconds", 0
-        EM.stop_event_loop
-      end
+      EventMachine::connect_unix_domain(@socket.path, ClientHandler)
     end
   end
 end
 
-require 'pry'
+module ClientHandler
+  def post_init
+    send_data "initialized"
+  end
+
+  def receive_data(data)
+    send_data("received: #{data}")
+  end
+
+  def unbind
+    EM.stop
+  end
+end
