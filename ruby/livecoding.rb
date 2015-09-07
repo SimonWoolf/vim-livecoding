@@ -22,27 +22,23 @@ end
 def update_if_needed()
   # Don't update more than once every 0.3s for performance reasons
   time = Time.now
-  if time - @last_compared < 0.3
+  if time - @last_compared < 0.0003
     return
   end
   @last_compared = time
 
   buffer_contents = get_buffer_contents
-  diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents)
+  diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents, {diff: '-e'})
   @last_buffer_contents = buffer_contents
 
-  if diff.none?
-    VIM::message("update_if_needed called, but buffer unchanged (is: #{@last_buffer_contents})")
-    return
-  else
-    @socket.send diff.to_s.split.first, 0
-    reply = begin
-      @socket.recv_nonblock(100)
-    rescue Errno::EAGAIN, Errno::EWOULDBLOCK
-      ""
-    end
-    VIM::message("update_if_needed called, reply is: #{reply}, diff is: #{diff.to_s}")
-  end
+  @socket.send(diff.to_s, 0) unless diff.none?
+
+  reply = begin
+            @socket.recv_nonblock(100000)
+          rescue Errno::EAGAIN, Errno::EWOULDBLOCK
+            ""
+          end
+  VIM::message("update_if_needed called, reply is: #{reply.split("\n").join("LF")}, diff is: #{diff.to_s.split("\n").join("LF")}")
 end
 
 def stop_publishing_this_buffer()
