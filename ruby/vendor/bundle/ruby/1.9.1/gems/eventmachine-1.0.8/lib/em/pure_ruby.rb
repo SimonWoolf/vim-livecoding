@@ -121,6 +121,11 @@ module EventMachine
     end
 
     # @private
+    def use_existing_unix_socket socket
+      EvmaUNIXExistingClient.new(socket).uuid
+    end
+
+    # @private
     def signal_loopbreak
       Reactor.instance.signal_loopbreak
     end
@@ -1011,7 +1016,65 @@ module EventMachine
   end
 end
 
+#--------------------------------------------------------------
+
+module EventMachine
+  # @private
+  class EvmaUNIXExistingClient < DatagramObject
+
+    def initialize io
+      super
+    end
+
+    def eventable_write
+      40.times {
+        break if @outbound_q.empty?
+        begin
+          data = @outbound_q.first
+          io.send data.to_s, 0
+          @outbound_q.shift
+        rescue Errno::EAGAIN, Erro::EWOULDBLOCK
+          break
+        rescue EOFError, Errno::ECONNRESET
+          @close_scheduled = true
+          @outbound_q.clear
+        end
+      }
+    end
+
+    def eventable_read
+      begin
+        if io.respond_to?(:recvfrom_nonblock)
+          40.times {
+            data = io.recv_nonblock(300000)
+            EventMachine::event_callback uuid, ConnectionData, data
+            @return_address = nil
+          }
+        else
+          raise "unimplemented datagram-read operation on this Ruby"
+        end
+      rescue Errno::EAGAIN, Errno::EWOULDBLOCK
+        # no-op
+      rescue Errno::ECONNRESET, EOFError
+        @close_scheduled = true
+        EventMachine::event_callback uuid, ConnectionUnbound, nil
+      end
+    end
+
+    def send_data data
+      @outbound_q << data.to_s unless @close_scheduled or @close_requested
+    end
+
+  end
+end
+
+
+
 # load base EM api on top, now that we have the underlying pure ruby
 # implementation defined
-require 'eventmachine'
+
+# force using local eventmachine.rb with my changes, not the actual gem
+#require 'eventmachine'
+script_dir = File.expand_path(File.dirname(__FILE__))
+require File.join(script_dir, '..', 'eventmachine')
 

@@ -812,6 +812,15 @@ module EventMachine
     connect socketname, *args, &blk
   end
 
+  def self.handle_existing_unix_socket socket, handler, *args, &blk
+    klass = klass_from_handler(Connection, handler, *args)
+    s = use_existing_unix_socket socket
+    c = klass.new s, *args
+    @conns[s] = c
+    block_given? and yield c
+    c
+  end
+
 
   # Used for UDP-based protocols. Its usage is similar to that of {EventMachine.start_server}.
   #
