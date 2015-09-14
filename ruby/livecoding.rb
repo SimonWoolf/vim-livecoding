@@ -74,6 +74,9 @@ def start_ably_process()
     EventMachine.run do
       EventMachine::handle_existing_unix_socket(@child_socket, EmAblyHandler)
     end
+    # clean up after eventloop stops.  this also lets the main process know
+    # something's wrong, it'll get an EPIPE if it tries to write to the socket
+    @child_socket.close
   end
 end
 
