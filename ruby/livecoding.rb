@@ -33,7 +33,7 @@ def update_if_needed()
   diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents, {diff: '-e'})
   @last_buffer_contents = buffer_contents
 
-  @mailbox.send([:diff, diff.to_s]) unless diff.none?
+  @mailbox.send([:diff, [buffer_id, diff.to_s]]) unless diff.none?
 
   while message = @mailbox.receive
     process_message(*message)
@@ -52,15 +52,19 @@ def process_message(action, data)
 end
 
 def stop_publishing_this_buffer()
-   VIM::message("Stopped publishing this buffer")
 end
 
 def stop_all_publishing()
-   VIM::message("Ceased all publishing and disconnected from vim-livecoding")
+  @mailbox.send [:close, nil]
+  VIM::message("Ceased all publishing and disconnected from vim-livecoding")
 end
 
 def get_buffer_contents()
   VIM::evaluate "join(getline(1, '$'), '\n')"
+end
+
+def buffer_id()
+  VIM::Buffer.current.number
 end
 
 def start_ably_process()

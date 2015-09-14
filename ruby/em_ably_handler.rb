@@ -27,7 +27,7 @@ module EmAblyHandler
     when :diff
       send [:message, "received #{data.inspect}"]
     when :close
-      send [:message, "closed"]
+      send [:message, "Connection closed, all publishing has stopped"]
     end
   end
 end
