@@ -5,6 +5,7 @@ require File.join(script_dir, '/vendor/eventmachine/lib/em/pure_ruby')
 #require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
 require File.join(script_dir, '/vendor/diffy/lib/diffy')
 require File.join(script_dir, 'mailbox')
+require File.join(script_dir, 'em_ably_handler')
 
 
 def publish_buffer
@@ -67,41 +68,7 @@ def start_ably_process()
     # Inside this process @last_buffer_contents is the state of the buffer at the time the process was forked,
     # @parent_socket is the server end of the socket
     EventMachine.run do
-      EventMachine::handle_existing_unix_socket(@child_socket, ClientHandler)
-    end
-  end
-end
-
-module ClientHandler
-  def post_init
-    send [:message, "initialized"]
-  end
-
-  def receive_data(raw_data)
-    begin
-      process_message *Marshal.load(raw_data)
-    rescue StandardError => e
-      send [:error, e]
-      EM.next_tick {EM.stop}
-    end
-  end
-
-  def unbind
-    EM.stop
-  end
-
-  private
-
-  def send(message)
-    send_data Marshal.dump(message)
-  end
-
-  def process_message(action, data)
-    case action
-    when :diff
-      send [:message, "received #{data.inspect}"]
-    when :close
-      send [:message, "closed"]
+      EventMachine::handle_existing_unix_socket(@child_socket, EmAblyHandler)
     end
   end
 end
