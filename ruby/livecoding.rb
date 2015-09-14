@@ -4,16 +4,18 @@ script_dir = File.expand_path(File.dirname(__FILE__))
 require File.join(script_dir, '/vendor/eventmachine/lib/em/pure_ruby')
 #require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
 require File.join(script_dir, '/vendor/diffy/lib/diffy')
+require File.join(script_dir, 'mailbox')
 
-@socket, @em_socket = Socket.pair(:UNIX, :DGRAM, 0)
 
 def publish_buffer
   VIM::message("Connected to vim-livecoding, publishing buffer...")
   @last_buffer_contents = get_buffer_contents
   @last_compared = Time.now
   if !@ably_process
+    parent_socket, @child_socket = Socket.pair(:UNIX, :DGRAM, 0)
     puts "starting ably process"
     @ably_process = start_ably_process
+    @mailbox = Mailbox.new parent_socket
   end
   VIM::message("Buffer being published to URL")
 end
@@ -30,21 +32,22 @@ def update_if_needed()
   diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents, {diff: '-e'})
   @last_buffer_contents = buffer_contents
 
-  # Streaming sockets don't guarantee messages won't be lumped together
-  #@socket.send(diff.to_s + "\0", 0) unless diff.none?
-  sent = @socket.send("a" * 5 + "\0", 0) #unless diff.none?
-  sent = @socket.send("a" * 5 + "\0", 0) #unless diff.none?
-  sent = @socket.send("a" * 5 + "\0", 0) #unless diff.none?
-  sent = @socket.send("a" * 5 + "\0", 0) #unless diff.none?
+  @mailbox.send([:diff, diff.to_s]) unless diff.none?
 
-  # TODO: read from socket till no more messages
-  reply = begin
-            @socket.recv_nonblock(1000000)
-          rescue Errno::EAGAIN, Errno::EWOULDBLOCK
-            ""
-          end
-  messageQueue = reply#.split("\0")
-  VIM::message("sent #{sent}, reply: #{messageQueue.inspect}")##{reply.split("\n").join("LF")}, diff is: #{diff.to_s.split("\n").join("LF")}")
+  while message = @mailbox.receive
+    process_message(*message)
+    #VIM::message("reply: #{message.split("\n").join("LF")}, diff was: #{diff.to_s.split("\n").join("LF")}")
+  end
+end
+
+def process_message(action, data)
+  case action
+  when :message
+    VIM::message("reply: #{data}")
+    nil
+  when :error
+    VIM::message("ERROR: #{data.inspect}. Publishing has stopped, process closed")
+  end
 end
 
 def stop_publishing_this_buffer()
@@ -62,37 +65,55 @@ end
 def start_ably_process()
   fork do
     # Inside this process @last_buffer_contents is the state of the buffer at the time the process was forked,
-    # @socket is the server end of the socket
+    # @parent_socket is the server end of the socket
     EventMachine.run do
-      EventMachine::handle_existing_unix_socket(@em_socket, ClientHandler)
+      EventMachine::handle_existing_unix_socket(@child_socket, ClientHandler)
     end
   end
 end
 
 module ClientHandler
   def post_init
-    send_data "initialized\0"
+    send [:message, "initialized"]
   end
 
-  def receive_data(data)
-    puts "received #{data}"
-    messageQueue = data.split("\0")
-    #message = messageQueue.pop
-    #send_data "received #{messageQueue.map(&:length)} msg lengths\0"
-    send_data "received #{messageQueue.inspect}"
+  def receive_data(raw_data)
+    begin
+      process_message *Marshal.load(raw_data)
+    rescue StandardError => e
+      send [:error, e]
+      EM.next_tick {EM.stop}
+    end
   end
 
   def unbind
     EM.stop
   end
+
+  private
+
+  def send(message)
+    send_data Marshal.dump(message)
+  end
+
+  def process_message(action, data)
+    case action
+    when :diff
+      send [:message, "received #{data.inspect}"]
+    when :close
+      send [:message, "closed"]
+    end
+  end
 end
 
 # Uncomment to test out in pry
-#class VIM
+
+#module VIM
   #def self.message(msg)
     #puts msg
   #end
-  #def self.evaluate(str)
+  #def self.evaluate(code)
+    #rand(36**8).to_s(36)
   #end
 #end
 #require 'pry'
