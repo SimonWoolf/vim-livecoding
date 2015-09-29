@@ -5,3 +5,4 @@ ruby '1.9.3'
 
 gem 'eventmachine'
 gem 'diffy'
+gem 'ably'
