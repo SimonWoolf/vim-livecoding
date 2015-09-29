@@ -1,14 +1,14 @@
 module EmAblyHandler
   def post_init
-    send [:message, "initialized"]
+    sendmsg [:message, "initialized"]
   end
 
   def receive_data(raw_data)
     begin
       process_message *Marshal.load(raw_data)
     rescue StandardError => e
-      send [:error, e]
-      EM.next_tick {EM.stop}
+      sendmsg [:error, e]
+      EM.next_tick { EM.stop }
     end
   end
 
@@ -18,16 +18,16 @@ module EmAblyHandler
 
   private
 
-  def send(message)
+  def sendmsg(message)
     send_data Marshal.dump(message)
   end
 
   def process_message(action, data)
     case action
     when :diff
-      send [:message, "received #{data.inspect}"]
+      sendmsg [:message, "received #{data.inspect}"]
     when :close
-      send [:message, "Connection closed, all publishing has stopped"]
+      sendmsg [:message, "Connection closed, all publishing has stopped"]
     end
   end
 end
