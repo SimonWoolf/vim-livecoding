@@ -1,11 +1,13 @@
 # Vim plugin can't assume that people have bundler, or even a system ruby.
 # Vendorise gems and do paths manually
 script_dir = File.expand_path(File.dirname(__FILE__))
-require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
-require File.join(script_dir, '/vendor/diffy/lib/diffy')
+DIFF_OPTIONS = '-e'
+
+#require File.join(script_dir, '/vendor/eventmachine/lib/eventmachine')
+#require File.join(script_dir, '/vendor/diffy/lib/diffy')
 
 #@child_socket, @parent_socket = Socket.pair(:UNIX, :DGRAM, 0)
-@socket = UNIXServer.new("/tmp/vim-livecoding-#{rand(36**8).to_s(36)}")
+#@socket = UNIXServer.new("/tmp/vim-livecoding-#{rand(36**8).to_s(36)}")
 
 def publish_buffer
   VIM::message("Connected to vim-livecoding, publishing buffer...")
@@ -28,7 +30,7 @@ def update_if_needed()
   @last_compared = time
 
   buffer_contents = get_buffer_contents
-  diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents)
+  diff = Diffy::Diff.new(@last_buffer_contents, buffer_contents, DIFF_OPTIONS)
   @last_buffer_contents = buffer_contents
 
   if diff.none?
